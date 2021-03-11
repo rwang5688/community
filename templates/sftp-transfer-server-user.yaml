@@ -1,0 +1,68 @@
+Description: Create an SFTP user and ingress rule
+
+Parameters:
+  # This stack defines the transfer server and exports values needed in this template    
+  TransferServerStack:
+    Type: String
+    Description: Provide the name of the transfer server stack
+    Default: yale-pcluster-support-sftp
+
+  BucketStack:
+    Description: Provide the S3 bucket CloudFormation stack name
+    Type: String
+    Default: yale-pcluster-support-customer-data
+
+  UserName:
+    Type: String
+    Description: Username that the agency will use to upload data
+
+  PublicKey:
+    Type: String
+    Description: The public portion of the agency's SSH keypair
+
+  CidrIp:
+    Type: String
+    Description: The IP address/range the agency will connect from
+    AllowedPattern: '^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/([0-9]|[1-2][0-9]|3[0-2]))$'
+
+Resources:
+  TransferUser:
+    Type: AWS::Transfer::User
+    # Metadata:
+    #   cfn-lint:
+    #     config:
+    #       ignore_checks:
+    #       - E3002
+    Properties: 
+      HomeDirectoryMappings: 
+        - Entry: "/"
+          Target:
+            Fn::Join:
+              - ''
+              - - "/"
+                - 
+                  Fn::ImportValue:
+                    !Sub ${BucketStack}-BucketName
+                - !Sub "/${UserName}"
+      HomeDirectoryType: LOGICAL
+      Role:
+        Fn::ImportValue:
+          !Sub ${TransferServerStack}-TransferAccessRoleArn
+      ServerId:
+        Fn::ImportValue:
+          !Sub ${TransferServerStack}-TransferServerId
+      SshPublicKeys: 
+        - !Ref PublicKey
+      UserName: !Ref UserName
+
+  IngressRule:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties: 
+      CidrIp: !Ref CidrIp
+      Description: !Sub ${UserName} ingress rule
+      FromPort: 22
+      ToPort: 22
+      GroupId:
+        Fn::ImportValue:
+          !Sub ${TransferServerStack}-SecurityGroupId
+      IpProtocol: tcp

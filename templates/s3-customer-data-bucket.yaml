@@ -1,0 +1,118 @@
+Description: Customer data source bucket
+
+Parameters:
+  ProjectName:
+    Type: String
+    Description: Project name
+    Default: yale-pcluster-support-customer-data
+
+  RetentionPeriodDays:
+    Type: Number
+    Description: Specify the number of days to retain log files (e.g. 730)
+    Default: 730
+
+Resources:
+  Bucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      BucketName: !Join
+        - "-"
+        - - !Sub ${ProjectName}
+          - !Ref "AWS::AccountId"
+          - !Select
+            - 0
+            - !Split
+              - "-"
+              - !Select
+                - 2
+                - !Split
+                  - "/"
+                  - !Ref "AWS::StackId"
+          -
+            Fn::Sub:
+              ${AWS::Region}
+      BucketEncryption:
+          ServerSideEncryptionConfiguration:
+            - ServerSideEncryptionByDefault:
+                SSEAlgorithm: AES256
+      LoggingConfiguration:
+        DestinationBucketName: !Ref LogBucket
+        LogFilePrefix: !Join
+          - "-"
+          - - !Sub s3-access-logs/${ProjectName}
+            - !Ref "AWS::AccountId"
+            - !Select
+              - 0
+              - !Split
+                - "-"
+                - !Select
+                  - 2
+                  - !Split
+                    - "/"
+                    - !Ref "AWS::StackId"
+            -
+              Fn::Sub:
+                ${AWS::Region}/
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: True
+        BlockPublicPolicy: True
+        IgnorePublicAcls: True
+        RestrictPublicBuckets: True
+
+  LogBucket:
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Join
+        - "-"
+        - - !Sub ${ProjectName}-access-logs
+          - !Ref "AWS::AccountId"
+          - !Select
+            - 0
+            - !Split
+              - "-"
+              - !Select
+                - 2
+                - !Split
+                  - "/"
+                  - !Ref "AWS::StackId"
+          -
+            Fn::Sub:
+              ${AWS::Region}
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      LifecycleConfiguration:
+        Rules:
+          - ExpirationInDays: !Ref RetentionPeriodDays
+            Id: Object expiration policy
+            Status: Enabled
+      AccessControl: LogDeliveryWrite
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: True
+        BlockPublicPolicy: True
+        IgnorePublicAcls: True
+        RestrictPublicBuckets: True
+
+Outputs:
+  BucketName:
+    Description: Production content bucket name
+    Value: !Ref Bucket
+    Export:
+      Name: !Sub ${AWS::StackName}-BucketName
+
+  BucketArn:
+    Description: Production content bucket ARN
+    Value: !GetAtt Bucket.Arn
+    Export:
+      Name: !Sub ${AWS::StackName}-BucketArn
+
+  LogBucketName:
+    Description: Log bucket name
+    Value: !Ref LogBucket
+    Export:
+      Name: !Sub ${AWS::StackName}-LogBucketName

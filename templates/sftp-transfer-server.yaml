@@ -1,0 +1,153 @@
+Description: Create a transfer server, ingress security group, and supporting infrastructure
+
+Parameters:
+  Vpc:
+    Description: Select the VPC for the Transfer family endpoints
+    Type: AWS::EC2::VPC::Id
+  
+  PublicSubnet1:
+    Description: Select an available public subnet for 1 of 2 Transfer family endpoints
+    Type: AWS::EC2::Subnet::Id
+
+  PublicSubnet2:
+    Description: Select an available public subnet for 2 of 2 Transfer family endpoints
+    Type: AWS::EC2::Subnet::Id
+
+  BucketStack:
+    Description: Provide the S3 bucket CloudFormation stack name
+    Type: String
+    Default: yale-src-data-repo
+
+Resources:
+  TransferServer:
+    Type: AWS::Transfer::Server
+    # Metadata:
+    #   cfn-lint:
+    #     config:
+    #       ignore_checks:
+    #       - E3002
+    #       - E3003
+    Properties: 
+      EndpointDetails: 
+        AddressAllocationIds:
+          - !GetAtt Eip1.AllocationId
+          - !GetAtt Eip2.AllocationId
+        SubnetIds:
+          - !Ref PublicSubnet1
+          - !Ref PublicSubnet2
+        VpcId: !Ref Vpc
+        SecurityGroupIds:
+          - !GetAtt SecurityGroup.GroupId
+      EndpointType: VPC
+      IdentityProviderType: SERVICE_MANAGED
+      LoggingRole: !GetAtt LoggingRole.Arn
+        
+  Eip1:
+    Type: AWS::EC2::EIP
+    Properties: 
+      Domain: vpc
+    
+  Eip2:
+    Type: AWS::EC2::EIP
+    Properties: 
+      Domain: vpc
+
+  TransferAccessRole:
+    Type: AWS::IAM::Role
+    Properties: 
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "transfer.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      Description: S3 bucket access role for AWS Transfer for SFTP
+
+  TransferAccessPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties: 
+      Description: S3 bucket access policy for AWS Transfer for SFTP
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - 's3:ListBucket'
+              - 's3:GetBucketLocation'
+            Resource:
+              Fn::ImportValue:
+                !Sub ${BucketStack}-BucketArn
+          - Effect: Allow
+            Action:
+              - 's3:PutObject'
+              - 's3:GetObject'
+            Resource: !Join
+              - ''
+              - - 
+                  Fn::ImportValue:
+                    !Sub ${BucketStack}-BucketArn
+                - '/*'
+      Roles: 
+        - !Ref TransferAccessRole
+
+  LoggingRole:
+    Type: AWS::IAM::Role
+    Properties: 
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "transfer.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      Description: CloudWatch logging role for AWS Transfer for SFTP
+  
+  LoggingPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties: 
+      Description: CloudWatch logging policy for AWS Transfer for SFTP
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - 'logs:CreateLogStream'
+              - 'logs:DescribeLogStreams'
+              - 'logs:CreateLogGroup'
+              - 'logs:PutLogEvents'
+            Resource: "arn:aws:logs:*:*:log-group:/aws/transfer/*"
+      Roles: 
+        - !Ref LoggingRole
+
+  SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties: 
+      GroupDescription: Ingress rules for AWS Transfer for SFTP
+      Tags: 
+        - Key: Name
+          Value: sftp-ingress
+      VpcId: !Ref Vpc
+
+Outputs:
+  SecurityGroupId:
+    Description: SG for AWS Transfer for SFTP
+    Value: !GetAtt SecurityGroup.GroupId
+    Export:
+      Name: !Sub ${AWS::StackName}-SecurityGroupId
+
+  TransferAccessRoleArn:
+    Description: Access Role for SFTP users
+    Value: !GetAtt TransferAccessRole.Arn
+    Export:
+      Name: !Sub ${AWS::StackName}-TransferAccessRoleArn
+
+  TransferServerId:
+    Description: AWS Transfer for SFTP Server ID
+    Value: !GetAtt TransferServer.ServerId
+    Export:
+      Name: !Sub ${AWS::StackName}-TransferServerId
