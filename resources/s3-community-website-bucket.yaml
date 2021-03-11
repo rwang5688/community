@@ -1,4 +1,5 @@
-Description: Customer data source bucket
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Community Website source bucket
 
 Parameters:
   ProjectName:
