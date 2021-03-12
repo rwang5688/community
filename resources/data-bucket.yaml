@@ -1,11 +1,10 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: Create a website bucket for community.octank.edu
+Description: Create a data bucket and its access log bucket
 
 Parameters:
   ProjectName:
     Type: String
     Description: Project name
-    Default: community.octank.edu
 
   RetentionPeriodDays:
     Type: Number
