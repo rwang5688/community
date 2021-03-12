@@ -6,12 +6,12 @@ Parameters:
   TransferServerStack:
     Type: String
     Description: Provide the name of the transfer server stack
-    Default: yale-pcluster-support-sftp
+    Default: sftp-community-octank-edu-transfer-server
 
   BucketStack:
     Description: Provide the S3 bucket CloudFormation stack name
     Type: String
-    Default: yale-pcluster-support-customer-data
+    Default: community-octank-edu-website-bucket
 
   UserName:
     Type: String
@@ -67,3 +67,4 @@ Resources:
         Fn::ImportValue:
           !Sub ${TransferServerStack}-SecurityGroupId
       IpProtocol: tcp
+

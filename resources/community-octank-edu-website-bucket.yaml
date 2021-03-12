@@ -5,7 +5,7 @@ Parameters:
   ProjectName:
     Type: String
     Description: Project name
-    Default: community-octank-edu-website-bucket
+    Default: community.octank.edu.rwang5688.com
 
   RetentionPeriodDays:
     Type: Number
@@ -43,6 +43,8 @@ Resources:
         BlockPublicPolicy: True
         IgnorePublicAcls: True
         RestrictPublicBuckets: True
+      VersioningConfiguration:
+        Status: Enabled
 
   LogBucket:
     DeletionPolicy: Retain
