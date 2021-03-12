@@ -74,16 +74,18 @@ Resources:
         BlockPublicPolicy: True
         IgnorePublicAcls: True
         RestrictPublicBuckets: True
+      VersioningConfiguration:
+        Status: Enabled
 
 Outputs:
   BucketName:
-    Description: Production content bucket name
+    Description: Website bucket name
     Value: !Ref Bucket
     Export:
       Name: !Sub ${AWS::StackName}-BucketName
 
   BucketArn:
-    Description: Production content bucket ARN
+    Description: Website bucket ARN
     Value: !GetAtt Bucket.Arn
     Export:
       Name: !Sub ${AWS::StackName}-BucketArn
