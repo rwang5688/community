@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: Create a transfer server, ingress security group, and supporting infrastructure
+Description: Create a transfer server, ingress security group, and supporting infrastructure for sftp-community.octank.edu
 
 Parameters:
   Vpc:

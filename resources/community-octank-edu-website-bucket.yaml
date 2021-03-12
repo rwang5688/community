@@ -1,11 +1,11 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: Community Website source bucket
+Description: Create a website bucket for community.octank.edu
 
 Parameters:
   ProjectName:
     Type: String
     Description: Project name
-    Default: yale-pcluster-support-customer-data
+    Default: community-octank-edu-website-bucket
 
   RetentionPeriodDays:
     Type: Number
@@ -22,15 +22,6 @@ Resources:
         - "-"
         - - !Sub ${ProjectName}
           - !Ref "AWS::AccountId"
-          - !Select
-            - 0
-            - !Split
-              - "-"
-              - !Select
-                - 2
-                - !Split
-                  - "/"
-                  - !Ref "AWS::StackId"
           -
             Fn::Sub:
               ${AWS::Region}
@@ -44,15 +35,6 @@ Resources:
           - "-"
           - - !Sub s3-access-logs/${ProjectName}
             - !Ref "AWS::AccountId"
-            - !Select
-              - 0
-              - !Split
-                - "-"
-                - !Select
-                  - 2
-                  - !Split
-                    - "/"
-                    - !Ref "AWS::StackId"
             -
               Fn::Sub:
                 ${AWS::Region}/
@@ -69,20 +51,12 @@ Resources:
     Properties:
       BucketName: !Join
         - "-"
-        - - !Sub ${ProjectName}-access-logs
+        - - !Sub ${ProjectName}
           - !Ref "AWS::AccountId"
-          - !Select
-            - 0
-            - !Split
-              - "-"
-              - !Select
-                - 2
-                - !Split
-                  - "/"
-                  - !Ref "AWS::StackId"
           -
             Fn::Sub:
               ${AWS::Region}
+          - "logs"
       BucketEncryption:
         ServerSideEncryptionConfiguration:
           - ServerSideEncryptionByDefault:
@@ -117,3 +91,4 @@ Outputs:
     Value: !Ref LogBucket
     Export:
       Name: !Sub ${AWS::StackName}-LogBucketName
+
