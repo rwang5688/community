@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: Create a transfer server, ingress security group, and supporting infrastructure for sftp-community.octank.edu
+Description: Create a transfer server, ingress sg, and supporting infrastructure for sftp-community.octank.edu
 
 Parameters:
   Vpc:
@@ -17,7 +17,7 @@ Parameters:
   BucketStack:
     Description: Provide the S3 bucket CloudFormation stack name
     Type: String
-    Default: yale-src-data-repo
+    Default: community-octank-edu-website-bucket
 
 Resources:
   TransferServer:
@@ -29,17 +29,17 @@ Resources:
     #       - E3002
     #       - E3003
     Properties: 
+      EndpointType: VPC
       EndpointDetails: 
         AddressAllocationIds:
           - !GetAtt Eip1.AllocationId
           - !GetAtt Eip2.AllocationId
+        SecurityGroupIds:
+          - !GetAtt SecurityGroup.GroupId
         SubnetIds:
           - !Ref PublicSubnet1
           - !Ref PublicSubnet2
         VpcId: !Ref Vpc
-        SecurityGroupIds:
-          - !GetAtt SecurityGroup.GroupId
-      EndpointType: VPC
       IdentityProviderType: SERVICE_MANAGED
       LoggingRole: !GetAtt LoggingRole.Arn
         
@@ -52,6 +52,15 @@ Resources:
     Type: AWS::EC2::EIP
     Properties: 
       Domain: vpc
+
+  SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties: 
+      GroupDescription: Ingress rules for AWS Transfer for SFTP
+      Tags: 
+        - Key: Name
+          Value: sg-sftp-community-octank-edu-ingress
+      VpcId: !Ref Vpc
 
   TransferAccessRole:
     Type: AWS::IAM::Role
@@ -124,15 +133,6 @@ Resources:
             Resource: "arn:aws:logs:*:*:log-group:/aws/transfer/*"
       Roles: 
         - !Ref LoggingRole
-
-  SecurityGroup:
-    Type: AWS::EC2::SecurityGroup
-    Properties: 
-      GroupDescription: Ingress rules for AWS Transfer for SFTP
-      Tags: 
-        - Key: Name
-          Value: sftp-ingress
-      VpcId: !Ref Vpc
 
 Outputs:
   SecurityGroupId:
