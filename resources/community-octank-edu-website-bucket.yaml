@@ -5,7 +5,7 @@ Parameters:
   ProjectName:
     Type: String
     Description: Project name
-    Default: community.octank.edu.rwang5688.com
+    Default: community.octank.edu
 
   RetentionPeriodDays:
     Type: Number
