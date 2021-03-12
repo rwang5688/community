@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: Create an SFTP user and ingress rule
+Description: Create a user and ingress rule for sftp-community.octank.edu
 
 Parameters:
   # This stack defines the transfer server and exports values needed in this template    
