@@ -1,17 +1,15 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: Create a user and sg ingress rule for sftp-community.octank.edu
+Description: Create a SFTP user and ingress sg rule
 
 Parameters:
   # This stack defines the transfer server and exports values needed in this template    
   TransferServerStack:
     Type: String
     Description: Provide the name of the transfer server stack
-    Default: sftp-community-octank-edu-transfer-server
 
   BucketStack:
     Description: Provide the S3 bucket CloudFormation stack name
     Type: String
-    Default: community-octank-edu-website-bucket
 
   UserName:
     Type: String

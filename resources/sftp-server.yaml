@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: Create a transfer server, ingress sg, and supporting infrastructure for sftp-community.octank.edu
+Description: Create a SFTP server, ingress sg, and supporting infrastructure
 
 Parameters:
   Vpc:
@@ -17,8 +17,15 @@ Parameters:
   BucketStack:
     Description: Provide the S3 bucket CloudFormation stack name
     Type: String
-    Default: community-octank-edu-website-bucket
+  
+  CustomHostname:
+    Description: Provide the custom hostname for the Transfer server endpoint
+    Type: String
 
+  HostedZone:
+    Description: Select a hosted zone for the Transfer server endpoint
+    Type: AWS::Route53::HostedZone::Id
+  
 Resources:
   TransferServer:
     Type: AWS::Transfer::Server
@@ -43,6 +50,7 @@ Resources:
           - !Ref PublicSubnet1
           - !Ref PublicSubnet2
         VpcId: !Ref Vpc
+      Domain: S3
       LoggingRole: !GetAtt LoggingRole.Arn
         
   Eip1:
@@ -135,6 +143,21 @@ Resources:
             Resource: "arn:aws:logs:*:*:log-group:/aws/transfer/*"
       Roles: 
         - !Ref LoggingRole
+
+  CustomHostnameDNSRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId: !Sub ${HostedZone}
+      Name: !Sub ${CustomHostname}
+      ResourceRecords:
+        - !Join
+          - ''
+          - - !GetAtt TransferServer.ServerId
+            - '.server.transfer.'
+            - !Ref 'AWS::Region'
+            - '.amazonaws.com'
+      TTL: '300'
+      Type: CNAME
 
 Outputs:
   SecurityGroupId:
