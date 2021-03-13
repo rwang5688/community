@@ -1,3 +1,3 @@
 #!/bin/bash
-sam deploy --stack-name rekognition-test --no-confirm-changeset \
+sam deploy --no-confirm-changeset --stack-name rekognition-test \
 --template-file rekognition-test.yaml
