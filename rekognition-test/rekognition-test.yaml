@@ -4,11 +4,11 @@ Description: An Amazon S3 trigger that uses rekognition APIs to detect faces
 Parameters:
   BucketNamePrefix:
     Type: String
-    Default: sam-example
+    Default: rekognition-test
   CollectionIdParameter:
     Type: String
 Resources:
-  rekognitiontest:
+  rekognitionTest:
     Type: 'AWS::Serverless::Function'
     Properties:
       Handler: lambda_function.lambda_handler
@@ -19,7 +19,7 @@ Resources:
       Timeout: 3
       Policies:
         - S3CrudPolicy:
-            BucketName: !Sub "${BucketNamePrefix}-rekognition"
+            BucketName: !Sub "${BucketNamePrefix}-data-bucket"
         - RekognitionNoDataAccessPolicy:
             CollectionId: !Ref CollectionIdParameter
         - RekognitionWriteOnlyAccessPolicy:
@@ -29,11 +29,22 @@ Resources:
           Type: S3
           Properties:
             Bucket:
-              Ref: Bucket1
+              Ref: rekognitionTestBucket
             Events:
               - 's3:ObjectCreated:*'
-  Bucket1:
+  rekognitionTestBucket:
     Type: 'AWS::S3::Bucket'
     Properties:
-      BucketName: !Sub "${BucketNamePrefix}-rekognition"
+      BucketName: !Sub "${BucketNamePrefix}-data-bucket"
+      BucketEncryption:
+          ServerSideEncryptionConfiguration:
+            - ServerSideEncryptionByDefault:
+                SSEAlgorithm: AES256
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: True
+        BlockPublicPolicy: True
+        IgnorePublicAcls: True
+        RestrictPublicBuckets: True
+      VersioningConfiguration:
+        Status: Enabled
 

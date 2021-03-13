@@ -3,9 +3,8 @@ version = 0.1
 [default.deploy]
 [default.deploy.parameters]
 stack_name = "rekognition-test"
-s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-q176tpommph7"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-1d55gq8zb6b9f"
 s3_prefix = "rekognition-test"
 region = "us-east-2"
-confirm_changeset = true
 capabilities = "CAPABILITY_IAM"
 parameter_overrides = "BucketNamePrefix=\"rekognition-test\" CollectionIdParameter=\"\""
