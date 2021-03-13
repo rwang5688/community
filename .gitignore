@@ -138,7 +138,6 @@ dmypy.json
 cython_debug/
 
 # private files
-wangrob*
-*.pem
-*.zip
 .aws-sam
+*.zip
+
