@@ -1,37 +1,20 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
-Description: An Amazon S3 trigger that uses rekognition APIs to detect faces
+Description: An Amazon S3 trigger that uses rekognition APIs to detect moderation labels
+
 Parameters:
   BucketNamePrefix:
     Type: String
     Default: rekognition-test
+
   CollectionIdParameter:
     Type: String
+
+  TopicName:
+    Type: String
+    Default: community-octank-edu-detect-moderation-labels
+
 Resources:
-  rekognitionTest:
-    Type: 'AWS::Serverless::Function'
-    Properties:
-      Handler: lambda_function.lambda_handler
-      Runtime: python3.8
-      CodeUri: .
-      Description: An Amazon S3 trigger that uses rekognition APIs to detect faces
-      MemorySize: 128
-      Timeout: 3
-      Policies:
-        - S3CrudPolicy:
-            BucketName: !Sub "${BucketNamePrefix}-data-bucket"
-        - RekognitionNoDataAccessPolicy:
-            CollectionId: !Ref CollectionIdParameter
-        - RekognitionWriteOnlyAccessPolicy:
-            CollectionId: !Ref CollectionIdParameter
-      Events:
-        BucketEvent1:
-          Type: S3
-          Properties:
-            Bucket:
-              Ref: rekognitionTestBucket
-            Events:
-              - 's3:ObjectCreated:*'
   rekognitionTestBucket:
     Type: 'AWS::S3::Bucket'
     Properties:
@@ -47,4 +30,45 @@ Resources:
         RestrictPublicBuckets: True
       VersioningConfiguration:
         Status: Enabled
+
+  rekognitionTest:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: lambda_function.lambda_handler
+      Runtime: python3.8
+      CodeUri: .
+      Description: An Amazon S3 trigger that uses rekognition APIs to detect moderation labels
+      MemorySize: 128
+      Timeout: 3
+      Policies:
+        - S3CrudPolicy:
+            BucketName: !Sub "${BucketNamePrefix}-data-bucket"
+        - RekognitionDetectOnlyPolicy: {}
+        - RekognitionNoDataAccessPolicy:
+            CollectionId: !Ref CollectionIdParameter
+        - RekognitionWriteOnlyAccessPolicy:
+            CollectionId: !Ref CollectionIdParameter
+        - SNSPublishMessagePolicy:
+            TopicName: !Ref TopicName 
+      Events:
+        BucketEvent1:
+          Type: S3
+          Properties:
+            Bucket:
+              Ref: rekognitionTestBucket
+            Events:
+              - 's3:ObjectCreated:*'
+
+Outputs:
+  BucketName:
+    Description: Rekognition Test data bucket name
+    Value: !Ref rekognitionTestBucket
+    Export:
+      Name: !Sub ${AWS::StackName}-BucketName
+
+  BucketArn:
+    Description: Rekognition bucket ARN
+    Value: !GetAtt rekognitionTestBucket.Arn
+    Export:
+      Name: !Sub ${AWS::StackName}-BucketArn
 
