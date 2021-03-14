@@ -13,6 +13,7 @@ sns = boto3.client('sns')
 
 TOPIC_ARN = 'arn:aws:sns:us-east-2:375205257662:community-octank-edu-detect-moderation-labels'
 
+
 # --------------- Helper Functions to call Rekognition APIs ------------------
 
 
