@@ -10,8 +10,9 @@ def create_invalidation(input_params):
     for items in input_params["Records"]:
         key = items["s3"]["object"]["key"]
         if key.endswith("index.html"):
-            paths.append("/" + key[:-10])
-        paths.append("/" + key)
+            paths.append("/" + key[:-10] + "*")
+        else:
+            paths.append("/" + key)
     print("Invalidating: %s." % (str(paths)))
 
     distribution_id = os.environ['DISTRIBUTION_ID']
