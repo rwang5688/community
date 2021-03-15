@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "Delete SFTP-Community User $1"
+echo "Remove SFTP-Community User $1"
 
 aws cloudformation delete-stack --stack-name sftp-community-user-$1
 
