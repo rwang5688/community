@@ -8,4 +8,4 @@ s3_prefix = "community-bucket"
 region = "us-east-2"
 confirm_changeset = true
 capabilities = "CAPABILITY_IAM"
-parameter_overrides = "ProjectName=\"community.octank.edu.rwang5688.com\" RetentionPeriodDays=\"730\" DistributionId=\"E26TLCVMBX0MYL\" CollectionIdParameter=\"\" TopicName=\"community-octank-edu-detect-moderation-labels\" TopicArn=\"arn:aws:sns:us-east-2:375205257662:community-octank-edu-detect-moderation-labels\""
+parameter_overrides = "ProjectName=\"community.octank.edu.rwang5688.com\" RetentionPeriodDays=\"730\" DistributionId=\"E26TLCVMBX0MYL\" CollectionIdParameter=\"\" LabelTypes=\"Explicit Nudity, Gambling, Suggestive, Violence\" ConfidenceThreshold=\"67\" RootUrl=\"http://community.octank.edu.rwang5688.com/\" TopicName=\"community-octank-edu-detect-moderation-labels\" TopicArn=\"arn:aws:sns:us-east-2:375205257662:community-octank-edu-detect-moderation-labels\""

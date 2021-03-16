@@ -16,6 +16,18 @@
     "ParameterValue": ""
   },
   {
+    "ParameterKey": "LabelTypes",
+    "ParameterValue": "Explicit Nudity, Gambling, Suggestive, Violence"
+  },
+  {
+    "ParameterKey": "ConfidenceThreshold",
+    "ParameterValue": 67
+  },
+  {
+    "ParameterKey": "RootUrl",
+    "ParameterValue": "http://community.octank.edu.rwang5688.com/"
+  },
+  {
     "ParameterKey": "TopicName",
     "ParameterValue": "community-octank-edu-detect-moderation-labels"
   },
