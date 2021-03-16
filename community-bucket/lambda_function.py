@@ -38,7 +38,7 @@ def lambda_handler(event, context):
         # If image failed moderation, send moderation warning
         mod_pass = mod_result['Pass']
         if mod_pass is False:
-            response = sns_util.send_moderation_warning(bucket, key, response)
+            response = sns_util.send_moderation_warning(key, response)
         
         print("After moderation: %s." % (json.dumps(response, indent=2)))
         return response
