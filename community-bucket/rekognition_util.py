@@ -6,7 +6,7 @@ from decimal import Decimal
 rekognition = boto3.client('rekognition')
 
 # Fall back for missing deployment parameters and OS environment variables
-LABEL_TYPES = [
+OFFENSIVE_LABELS = [
     'Explicit Nudity',
     'Gambling',
     'Suggestive',
@@ -36,23 +36,24 @@ def get_env_var_float(env_var_name, default_value):
     env_var_float = float(env_var)
     return env_var_float
 
-def check_label_type(mod_label, label_type, mod_details):
-    # label type exists and confidence level exceed threshold
-    if((mod_label['ParentName'] == label_type or mod_label['Name'] == label_type) and \
-        Decimal(str(mod_label['Confidence'])) >= CONFIDENCE_THRESHOLD):
-        error_message = "Image has " + label_type + " Content."
-        mod_details['Pass'] = False
-        mod_details['ErrorMessages'].append(error_message)
-        return True
+def is_offensive_label(mod_label, offensive_labels, mod_details):
+    for offensive_label in offensive_labels:
+        # report the first offensive label that exceeds confidence threshold
+        if((mod_label['ParentName'] == offensive_label or mod_label['Name'] == offensive_label) and \
+            Decimal(str(mod_label['Confidence'])) >= CONFIDENCE_THRESHOLD):
+            error_message = "Image has " + offensive_label + " Content."
+            mod_details['Pass'] = False
+            mod_details['ErrorMessages'].append(error_message)
+            return True
     
     return False
 
 def detect_moderation_labels(bucket, key, input_params):
     # get environment variables
-    env_var_name = 'LABEL_TYPES'
-    default_value = LABEL_TYPES
-    label_types = get_env_var_list(env_var_name, default_value)
-    print("label_types=%s" % (label_types))
+    env_var_name = 'OFFENSIVE_LABELS'
+    default_value = OFFENSIVE_LABELS
+    offensive_labels = get_env_var_list(env_var_name, default_value)
+    print("offensive_labels=%s" % (offensive_labels))
 
     env_var_name = 'CONFIDENCE_THRESHOLD'
     default_value = CONFIDENCE_THRESHOLD
@@ -68,15 +69,10 @@ def detect_moderation_labels(bucket, key, input_params):
     mod_response = rekognition.detect_moderation_labels(
         Image={"S3Object": {"Bucket": bucket, "Name": key}}, MinConfidence=10)
 
-    # stop after we find first label that fails moderation check
+    # stop after we find first label that may be offensive
     mod_labels = mod_response['ModerationLabels']
     for mod_label in mod_labels:
-        found_failed_label = False
-        for label_type in label_types:
-            if check_label_type(mod_label, label_type, mod_details):
-                found_failed_label = True
-                break
-        if found_failed_label is True:
+        if is_offensive_label(mod_label, offensive_labels, mod_details):
             break
 
     mod_result = {
