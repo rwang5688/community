@@ -22,7 +22,7 @@ Parameters:
     Type: String
     Default: ""
   
-  LabelTypes:
+  OffensiveLabels:
     Description: Comma separated string list of label types to check for
     Type: String
     Default: "Explicit Nudity, Gambling, Suggestive, Violence"
@@ -121,7 +121,7 @@ Resources:
       Environment:
         Variables:
           DISTRIBUTION_ID: !Ref DistributionId
-          LABEL_TYPES: !Ref LabelTypes
+          OFFENSIVE_LABELS: !Ref OffensiveLabels
           CONFIDENCE_THRESHOLD: !Ref ConfidenceThreshold
           ROOT_URL: !Ref RootUrl
           TOPIC_ARN: !Ref TopicArn
