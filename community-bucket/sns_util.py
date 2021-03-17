@@ -6,7 +6,7 @@ import os
 sns = boto3.client('sns')
 
 # Fall back for missing deployment parameters and OS environment variables
-ROOT_URL =  'http://community.octank.edu.rwang5688.com/'
+ROOT_URL =  'https://community.octank.edu.rwang5688.com/'
 TOPIC_ARN = 'arn:aws:sns:us-east-2:375205257662:community-octank-edu-detect-moderation-labels'
 
 def get_env_var(env_var_name, default_value):
