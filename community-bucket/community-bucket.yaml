@@ -34,7 +34,7 @@ Parameters:
   RootUrl:
     Description: Root URL for Website content
     Type: String
-    Default: "http://community.octank.edu.rwang5688.com/"
+    Default: "https://community.octank.edu.rwang5688.com/"
 
   TopicName:
     Description: Topic Name for the detect moderation labels SNS topic
