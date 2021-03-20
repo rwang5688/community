@@ -138,8 +138,7 @@ dmypy.json
 cython_debug/
 
 # private files
+.DS_Store
 wangrob*
 .aws-sam
-*.zip
-create_task
 
