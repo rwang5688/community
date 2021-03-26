@@ -9,7 +9,7 @@
   },
   {
     "ParameterKey": "DistributionId",
-    "ParameterValue": "E26TLCVMBX0MYL"
+    "ParameterValue": "E2UP9QO3LS5KDN"
   },
   {
     "ParameterKey": "CollectionIdParameter",
@@ -25,15 +25,15 @@
   },
   {
     "ParameterKey": "RootUrl",
-    "ParameterValue": "https://community.octank.edu.rwang5688.com/"
+    "ParameterValue": "https://mycommunity.octank.edu.rwang5688.com/"
   },
   {
     "ParameterKey": "TopicName",
-    "ParameterValue": "community-octank-edu-detect-moderation-labels"
+    "ParameterValue": "mycommunity-octank-edu-detect-moderation-labels"
   },
   {
     "ParameterKey": "TopicArn",
-    "ParameterValue": "arn:aws:sns:us-east-1:375205257662:community-octank-edu-detect-moderation-labels"
+    "ParameterValue": "arn:aws:sns:us-east-1:375205257662:mycommunity-octank-edu-detect-moderation-labels"
   }
 ]
 
