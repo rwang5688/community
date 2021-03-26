@@ -1,0 +1,170 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: Create content and content logs bucket, w/ Amazon S3 trigger that invalidates CloudFront cache and detect moderation labels
+
+Parameters:
+  ProjectName:
+    Type: String
+    Description: Project name
+    Default: mycommunity.octank.edu.rwang5688.com
+
+  RetentionPeriodDays:
+    Type: Number
+    Description: Specify the number of days to retain log files (e.g. 730)
+    Default: 730
+  
+  DistributionId:
+    Description: CloudFront Distribution Id
+    Type: String
+    Default: "E26TLCVMBX0MYL"
+
+  CollectionIdParameter:
+    Type: String
+    Default: ""
+  
+  OffensiveLabels:
+    Description: Comma separated string list of label types to check for
+    Type: String
+    Default: "Explicit Nudity, Gambling, Suggestive, Violence"
+  
+  ConfidenceThreshold:
+    Type: Number
+    Default: 67
+
+  RootUrl:
+    Description: Root URL for Website content
+    Type: String
+    Default: "https://community.octank.edu.rwang5688.com/"
+
+  TopicName:
+    Description: Topic Name for the detect moderation labels SNS topic
+    Type: String
+    Default: "community-octank-edu-detect-moderation-labels"
+
+  TopicArn:
+    Description: Topic ARN for the detect moderation labels SNS topic
+    Type: String
+    Default: "arn:aws:sns:us-east-1:375205257662:community-octank-edu-detect-moderation-labels"
+
+Resources:
+  ContentBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      BucketName: !Join
+        - "-"
+        - - !Sub ${ProjectName}
+          - !Ref "AWS::AccountId"
+          -
+            Fn::Sub:
+              ${AWS::Region}
+      BucketEncryption:
+          ServerSideEncryptionConfiguration:
+            - ServerSideEncryptionByDefault:
+                SSEAlgorithm: AES256
+      LoggingConfiguration:
+        DestinationBucketName: !Ref ContentLogsBucket
+        LogFilePrefix: !Join
+          - "-"
+          - - !Sub s3-access-logs/${ProjectName}
+            - !Ref "AWS::AccountId"
+            -
+              Fn::Sub:
+                ${AWS::Region}/
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: True
+        BlockPublicPolicy: True
+        IgnorePublicAcls: True
+        RestrictPublicBuckets: True
+      VersioningConfiguration:
+        Status: Enabled
+
+  ContentLogsBucket:
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Join
+        - "-"
+        - - !Sub ${ProjectName}
+          - !Ref "AWS::AccountId"
+          -
+            Fn::Sub:
+              ${AWS::Region}
+          - "logs"
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      LifecycleConfiguration:
+        Rules:
+          - ExpirationInDays: !Ref RetentionPeriodDays
+            Id: Object expiration policy
+            Status: Enabled
+      AccessControl: LogDeliveryWrite
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: True
+        BlockPublicPolicy: True
+        IgnorePublicAcls: True
+        RestrictPublicBuckets: True
+      VersioningConfiguration:
+        Status: Enabled
+
+  publishContent:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: lambda_function.lambda_handler
+      Runtime: python3.8
+      CodeUri: .
+      Description: Amazon S3 trigger that invalidates CloudFront cache and detect moderation labels
+      Environment:
+        Variables:
+          DISTRIBUTION_ID: !Ref DistributionId
+          OFFENSIVE_LABELS: !Ref OffensiveLabels
+          CONFIDENCE_THRESHOLD: !Ref ConfidenceThreshold
+          ROOT_URL: !Ref RootUrl
+          TOPIC_ARN: !Ref TopicArn
+      MemorySize: 128
+      Timeout: 3
+      Policies:
+        - S3ReadPolicy:
+            BucketName: !Join
+              - "-"
+              - - !Sub ${ProjectName}
+                - !Ref "AWS::AccountId"
+                -
+                  Fn::Sub:
+                    ${AWS::Region}
+        #- CloudFrontFullAccessPolicy: {}
+        - RekognitionDetectOnlyPolicy: {}
+        - SNSPublishMessagePolicy:
+            TopicName: !Ref TopicName 
+      Events:
+        BucketEvent1:
+          Type: S3
+          Properties:
+            Bucket:
+              Ref: ContentBucket
+            Events:
+              - 's3:ObjectCreated:*'
+
+Outputs:
+  BucketName:
+    Description: Content Bucket name
+    Value: !Ref ContentBucket
+    Export:
+      Name: !Sub ${AWS::StackName}-BucketName
+
+  BucketArn:
+    Description: Content Bucket ARN
+    Value: !GetAtt ContentBucket.Arn
+    Export:
+      Name: !Sub ${AWS::StackName}-BucketArn
+
+  LogsBucketName:
+    Description: Content Logs bucket name
+    Value: !Ref ContentLogsBucket
+    Export:
+      Name: !Sub ${AWS::StackName}-LogsBucketName
+
