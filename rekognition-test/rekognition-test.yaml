@@ -12,7 +12,7 @@ Parameters:
 
   TopicName:
     Type: String
-    Default: community-octank-edu-detect-moderation-labels
+    Default: mycommunity-octank-edu-detect-moderation-labels
 
 Resources:
   rekognitionTestBucket:

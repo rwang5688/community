@@ -11,7 +11,7 @@ print('Loading function')
 rekognition = boto3.client('rekognition')
 sns = boto3.client('sns')
 
-TOPIC_ARN = 'arn:aws:sns:us-east-1:375205257662:community-octank-edu-detect-moderation-labels'
+TOPIC_ARN = 'arn:aws:sns:us-east-1:375205257662:mycommunity-octank-edu-detect-moderation-labels'
 
 
 # --------------- Helper Functions to call Rekognition APIs ------------------
