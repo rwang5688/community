@@ -11,7 +11,7 @@ print('Loading function')
 rekognition = boto3.client('rekognition')
 sns = boto3.client('sns')
 
-TOPIC_ARN = 'arn:aws:sns:us-east-2:375205257662:community-octank-edu-detect-moderation-labels'
+TOPIC_ARN = 'arn:aws:sns:us-east-1:375205257662:mycommunity-octank-edu-detect-moderation-labels'
 
 
 # --------------- Helper Functions to call Rekognition APIs ------------------
@@ -26,15 +26,25 @@ def detect_moderation_labels(bucket, key, input_params):
     mod_response = rekognition.detect_moderation_labels(
         Image={"S3Object": {"Bucket": bucket, "Name": key}}, MinConfidence=10)
     for mod_label in mod_response['ModerationLabels']:
-        if((mod_label['ParentName'] == 'Explicit Nudity' or mod_label['Name'] == 'Explicit Nudity') and Decimal(str(mod_label['Confidence'])) >= 70):
+        if((mod_label['ParentName'] == 'Explicit Nudity' or mod_label['Name'] == 'Explicit Nudity') and Decimal(str(mod_label['Confidence'])) >= 67):
             # print('Image has Explicit Content.')
             mod_details['Pass'] = False
             mod_details['ErrorMessages'].append('Image has Explicit Content.')
             break
-        if((mod_label['ParentName'] == 'Suggestive' or mod_label['Name'] == 'Suggestive') and Decimal(str(mod_label['Confidence'])) >= 70):
+        if((mod_label['ParentName'] == 'Gambling' or mod_label['Name'] == 'Gambling') and Decimal(str(mod_label['Confidence'])) >= 67):
+            # print('Image has Gambling Content.')
+            mod_details['Pass'] = False
+            mod_details['ErrorMessages'].append('Image has Gambling Content.')
+            break
+        if((mod_label['ParentName'] == 'Suggestive' or mod_label['Name'] == 'Suggestive') and Decimal(str(mod_label['Confidence'])) >= 67):
             # print('Image has Suggestive Content.')
             mod_details['Pass'] = False
             mod_details['ErrorMessages'].append('Image has Suggestive Content.')
+            break
+        if((mod_label['ParentName'] == 'Violence' or mod_label['Name'] == 'Violence') and Decimal(str(mod_label['Confidence'])) >= 67):
+            # print('Image has Violence Content.')
+            mod_details['Pass'] = False
+            mod_details['ErrorMessages'].append('Image has Violence Content.')
             break
 
     # process overall result

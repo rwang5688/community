@@ -12,13 +12,19 @@ Parameters:
 
   TopicName:
     Type: String
-    Default: community-octank-edu-detect-moderation-labels
+    Default: mycommunity-octank-edu-detect-moderation-labels
 
 Resources:
   rekognitionTestBucket:
     Type: 'AWS::S3::Bucket'
     Properties:
-      BucketName: !Sub "${BucketNamePrefix}-data-bucket"
+      BucketName: !Join
+        - "-"
+        - - !Sub ${BucketNamePrefix}
+          - !Ref "AWS::AccountId"
+          -
+            Fn::Sub:
+              ${AWS::Region}
       BucketEncryption:
           ServerSideEncryptionConfiguration:
             - ServerSideEncryptionByDefault:
@@ -42,7 +48,13 @@ Resources:
       Timeout: 3
       Policies:
         - S3CrudPolicy:
-            BucketName: !Sub "${BucketNamePrefix}-data-bucket"
+            BucketName: !Join
+              - "-"
+              - - !Sub ${BucketNamePrefix}
+                - !Ref "AWS::AccountId"
+                -
+                  Fn::Sub:
+                    ${AWS::Region}
         - RekognitionDetectOnlyPolicy: {}
         - RekognitionNoDataAccessPolicy:
             CollectionId: !Ref CollectionIdParameter

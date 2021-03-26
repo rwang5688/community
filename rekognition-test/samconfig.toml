@@ -3,9 +3,9 @@ version = 0.1
 [default.deploy]
 [default.deploy.parameters]
 stack_name = "rekognition-test"
-s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-1d55gq8zb6b9f"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-fbfdkofn6q6h"
 s3_prefix = "rekognition-test"
-region = "us-east-2"
+region = "us-east-1"
 capabilities = "CAPABILITY_IAM"
-parameter_overrides = "BucketNamePrefix=\"rekognition-test\" CollectionIdParameter=\"\" TopicName=\"community-octank-edu-detect-moderation-labels\""
+parameter_overrides = "BucketNamePrefix=\"rekognition-test\" CollectionIdParameter=\"\" TopicName=\"mycommunity-octank-edu-detect-moderation-labels\""
 confirm_changeset = true

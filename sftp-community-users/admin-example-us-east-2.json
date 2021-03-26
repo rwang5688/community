@@ -17,7 +17,7 @@
   },
   {
     "ParameterKey": "CidrIp",
-    "ParameterValue": "72.21.198.0/24"
+    "ParameterValue": "52.95.4.0/24"
   } 
 ]
 

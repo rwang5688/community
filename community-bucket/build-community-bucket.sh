@@ -1,2 +1,2 @@
 #!/bin/bash
-sam build --template-file community-bucket.yaml
+sam build --use-container --template-file community-bucket.yaml

@@ -1,3 +1,3 @@
 #!/bin/bash
-sam build --template-file rekognition-test.yaml
+sam build --use-container --template-file rekognition-test.yaml
 

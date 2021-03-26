@@ -6,7 +6,7 @@ Parameters:
   ProjectName:
     Type: String
     Description: Project name
-    Default: community.octank.edu.rwang5688.com
+    Default: mycommunity.octank.edu.rwang5688.com
 
   RetentionPeriodDays:
     Type: Number
@@ -16,7 +16,7 @@ Parameters:
   DistributionId:
     Description: CloudFront Distribution Id
     Type: String
-    Default: "E2UP9QO3LS5KDN"
+    Default: "E26TLCVMBX0MYL"
 
   CollectionIdParameter:
     Type: String
@@ -34,17 +34,17 @@ Parameters:
   RootUrl:
     Description: Root URL for Website content
     Type: String
-    Default: "https://mycommunity.octank.edu.rwang5688.com/"
+    Default: "https://community.octank.edu.rwang5688.com/"
 
   TopicName:
     Description: Topic Name for the detect moderation labels SNS topic
     Type: String
-    Default: "mycommunity-octank-edu-detect-moderation-labels"
+    Default: "community-octank-edu-detect-moderation-labels"
 
   TopicArn:
     Description: Topic ARN for the detect moderation labels SNS topic
     Type: String
-    Default: "arn:aws:sns:us-east-1:375205257662:mycommunity-octank-edu-detect-moderation-labels"
+    Default: "arn:aws:sns:us-east-1:375205257662:community-octank-edu-detect-moderation-labels"
 
 Resources:
   ContentBucket:
