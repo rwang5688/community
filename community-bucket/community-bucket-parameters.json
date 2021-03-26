@@ -33,7 +33,7 @@
   },
   {
     "ParameterKey": "TopicArn",
-    "ParameterValue": "arn:aws:sns:us-east-2:375205257662:community-octank-edu-detect-moderation-labels"
+    "ParameterValue": "arn:aws:sns:us-east-1:375205257662:community-octank-edu-detect-moderation-labels"
   }
 ]
 

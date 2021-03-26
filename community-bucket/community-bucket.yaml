@@ -44,7 +44,7 @@ Parameters:
   TopicArn:
     Description: Topic ARN for the detect moderation labels SNS topic
     Type: String
-    Default: "arn:aws:sns:us-east-2:375205257662:community-octank-edu-detect-moderation-labels"
+    Default: "arn:aws:sns:us-east-1:375205257662:community-octank-edu-detect-moderation-labels"
 
 Resources:
   ContentBucket:
