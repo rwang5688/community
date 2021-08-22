@@ -1,5 +1,6 @@
 # ignore key files
 id_rsa*
+sftp_key_pair*
 admin
 admin.json
 mcu
