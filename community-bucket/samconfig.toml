@@ -3,8 +3,9 @@ version = 0.1
 [default.deploy]
 [default.deploy.parameters]
 stack_name = "community-bucket"
-s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-fbfdkofn6q6h"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-d64eit9s0rhn"
 s3_prefix = "community-bucket"
 region = "us-east-1"
 capabilities = "CAPABILITY_IAM"
-parameter_overrides = "ProjectName=\"community.octank.edu.rwang5688.com\" RetentionPeriodDays=\"730\" DistributionId=\"E2UP9QO3LS5KDN\" CollectionIdParameter=\"\" OffensiveLabels=\"Explicit Nudity, Gambling, Suggestive, Violence\" ConfidenceThreshold=\"67\" RootUrl=\"https://mycommunity.octank.edu.rwang5688.com/\" TopicName=\"mycommunity-octank-edu-detect-moderation-labels\" TopicArn=\"arn:aws:sns:us-east-1:375205257662:mycommunity-octank-edu-detect-moderation-labels\""
+parameter_overrides = "ProjectName=\"community.octank-01.edu.rwang5688.com\" RetentionPeriodDays=\"730\" DistributionId=\"E261UF9BM2I0VJ\" CollectionIdParameter=\"community.octank-01.edu.rwang5688.com\" OffensiveLabels=\"Explicit Nudity, Gambling, Suggestive, Violence\" ConfidenceThreshold=\"67\" RootUrl=\"https://community.octank-01.edu.rwang5688.com/\" TopicName=\"community-octank-01-edu-detect-moderation-labels\" TopicArn=\"arn:aws:sns:us-east-1:867830616001:community-octank-01-edu-detect-moderation-labels\""
+confirm_changeset = true
