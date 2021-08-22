@@ -1,7 +1,7 @@
 [
   {
     "ParameterKey": "ProjectName",
-    "ParameterValue": "community.octank.edu.rwang5688.com"
+    "ParameterValue": "community.octank-01.edu.rwang5688.com"
   },
   {
     "ParameterKey": "RetentionPeriodDays",
@@ -9,11 +9,11 @@
   },
   {
     "ParameterKey": "DistributionId",
-    "ParameterValue": "E2UP9QO3LS5KDN"
+    "ParameterValue": "E261UF9BM2I0VJ"
   },
   {
     "ParameterKey": "CollectionIdParameter",
-    "ParameterValue": ""
+    "ParameterValue": "community.octank-01.edu.rwang5688.com"
   },
   {
     "ParameterKey": "OffensiveLabels",
@@ -25,15 +25,15 @@
   },
   {
     "ParameterKey": "RootUrl",
-    "ParameterValue": "https://mycommunity.octank.edu.rwang5688.com/"
+    "ParameterValue": "https://community.octank-01.edu.rwang5688.com/"
   },
   {
     "ParameterKey": "TopicName",
-    "ParameterValue": "mycommunity-octank-edu-detect-moderation-labels"
+    "ParameterValue": "community-octank-01-edu-detect-moderation-labels"
   },
   {
     "ParameterKey": "TopicArn",
-    "ParameterValue": "arn:aws:sns:us-east-1:375205257662:mycommunity-octank-edu-detect-moderation-labels"
+    "ParameterValue": "arn:aws:sns:us-east-1:867830616001:community-octank-01-edu-detect-moderation-labels"
   }
 ]
 

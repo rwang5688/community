@@ -9,10 +9,11 @@ Parameters:
 
   CollectionIdParameter:
     Type: String
+    Default: rekognition-test
 
   TopicName:
     Type: String
-    Default: mycommunity-octank-edu-detect-moderation-labels
+    Default: rekognition-test-detect-moderation-labels
 
 Resources:
   rekognitionTestBucket:

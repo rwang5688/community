@@ -12,10 +12,6 @@ def lambda_handler(event, context):
 
     print("Received event: %s." % (json.dumps(event, indent=2)))
 
-    # Create invalidation
-    event = cloudfront_util.create_invalidation(event)
-    print("After create invalidation: %s." % (json.dumps(event, indent=2)))
-
     # Get the object from the event
     bucket = event['Records'][0]['s3']['bucket']['name']
     key = urllib.parse.unquote_plus(event['Records'][0]['s3']['object']['key'])
@@ -48,3 +44,7 @@ def lambda_handler(event, context):
               "Make sure your object and bucket exist and your bucket is in the same region as this function.")
         raise e
 
+    # Create invalidation
+    event = cloudfront_util.create_invalidation(event)
+    print("After create invalidation: %s." % (json.dumps(event, indent=2)))
+    
