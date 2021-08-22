@@ -1,5 +1,8 @@
-# demo users
-admin001*
-mcu*
-starfleet*
-
+# ignore key files
+id_rsa*
+admin
+admin.json
+mcu
+mcu.json
+starfleet
+starfleet.json

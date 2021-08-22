@@ -5,23 +5,23 @@
   },
   {
     "ParameterKey": "Vpc",
-    "ParameterValue": "vpc-4d67c030"
+    "ParameterValue": "vpc-0e40041a4c15ab813"
   }, 
   {
     "ParameterKey": "PublicSubnet1",
-    "ParameterValue": "subnet-e476e7c5"
+    "ParameterValue": "subnet-01184acb951110b1d"
   },
   {
     "ParameterKey": "PublicSubnet2",
-    "ParameterValue": "subnet-4e035903"
+    "ParameterValue": "subnet-0809de4dad5067d71"
   },
   {
     "ParameterKey": "CustomHostname",
-    "ParameterValue": "sftp-mycommunity.octank.edu.rwang5688.com"
+    "ParameterValue": "sftp-community.octank-01.edu.rwang5688.com"
   },
   {
     "ParameterKey": "HostedZone",
-    "ParameterValue": "Z05028892SWHRH407JS0E"
+    "ParameterValue": "Z0584572SNNEAI38ML8M"
   } 
 ]
 
