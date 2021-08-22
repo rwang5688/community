@@ -1,4 +1,5 @@
 # ignore key files
+*.pub
 id_rsa*
 sftp_key_pair*
 admin
