@@ -6,6 +6,7 @@ stack_name = "community-bucket"
 s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-d64eit9s0rhn"
 s3_prefix = "community-bucket"
 region = "us-east-1"
+profile = "default"
+confirm_changeset = true
 capabilities = "CAPABILITY_IAM"
 parameter_overrides = "ProjectName=\"community.octank-01.edu.rwang5688.com\" RetentionPeriodDays=\"730\" DistributionId=\"E261UF9BM2I0VJ\" CollectionIdParameter=\"community.octank-01.edu.rwang5688.com\" OffensiveLabels=\"Explicit Nudity, Gambling, Suggestive, Violence\" ConfidenceThreshold=\"67\" RootUrl=\"https://community.octank-01.edu.rwang5688.com/\" TopicName=\"community-octank-01-edu-detect-moderation-labels\" TopicArn=\"arn:aws:sns:us-east-1:867830616001:community-octank-01-edu-detect-moderation-labels\""
-confirm_changeset = true

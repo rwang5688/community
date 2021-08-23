@@ -1,8 +1,8 @@
 #!/bin/bash
-echo "Remove SFTP-Community Admin $1 from default."
+echo "Remove SFTP-Community Admin $1 from wangrob-sandbox-01."
 
 aws cloudformation delete-stack --stack-name sftp-community-admin-$1 \
---profile default \
+--profile wangrob-sandbox-01 \
 --region us-east-1
 
 echo "Done"
