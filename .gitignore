@@ -140,5 +140,3 @@ cython_debug/
 # private files
 .DS_Store
 wangrob*
-.aws-sam
-
