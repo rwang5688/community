@@ -1,5 +1,7 @@
 # ignore key files
 dot-ssh/*
-admin.json
-mcu.json
-starfleet.json
+id_rsa*
+sftp_key_pair*
+admin*
+mcu*
+starfleet*
