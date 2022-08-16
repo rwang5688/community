@@ -3,7 +3,6 @@ echo "Deploy community-bucket stack (including publishContent function) in defau
 
 sam deploy --guided --stack-name community-bucket \
 --template-file community-bucket.yaml \
---profile default \
---region us-east-1
+--profile default
 
 echo "Done"

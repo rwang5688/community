@@ -6,7 +6,7 @@ Parameters:
   ProjectName:
     Type: String
     Description: Project name
-    Default: "community.octank-01.edu.rwang5688.com"
+    Default: "community"
 
   RetentionPeriodDays:
     Type: Number
@@ -16,11 +16,11 @@ Parameters:
   DistributionId:
     Description: CloudFront Distribution Id
     Type: String
-    Default: "E261UF9BM2I0VJ"
+    Default: "E1234567890ABC"
 
   CollectionIdParameter:
     Type: String
-    Default: "community.octank-01.edu.rwang5688.com"
+    Default: "community"
   
   OffensiveLabels:
     Description: Comma separated string list of label types to check for
@@ -34,17 +34,17 @@ Parameters:
   RootUrl:
     Description: Root URL for Website content
     Type: String
-    Default: "https://community.octank-01.edu.rwang5688.com/"
+    Default: "https://community.octank.edu/"
 
   TopicName:
     Description: Topic Name for the detect moderation labels SNS topic
     Type: String
-    Default: "community-octank-01-edu-detect-moderation-labels"
+    Default: "community-octank-edu-detect-moderation-labels"
 
   TopicArn:
     Description: Topic ARN for the detect moderation labels SNS topic
     Type: String
-    Default: "arn:aws:sns:us-east-1:867830616001:community-octank-01-edu-detect-moderation-labels"
+    Default: "arn:aws:sns:us-west-2:123456789012:community-octank-edu-detect-moderation-labels"
 
 Resources:
   ContentBucket:
@@ -56,6 +56,7 @@ Resources:
         - "-"
         - - !Sub ${ProjectName}
           - !Ref "AWS::AccountId"
+          - !Ref "AWS::Region"
       BucketEncryption:
           ServerSideEncryptionConfiguration:
             - ServerSideEncryptionByDefault:
@@ -66,6 +67,7 @@ Resources:
           - "-"
           - - !Sub s3-access-logs/${ProjectName}
             - !Ref "AWS::AccountId"
+            - !Ref "AWS::Region"
       PublicAccessBlockConfiguration:
         BlockPublicAcls: True
         BlockPublicPolicy: True
@@ -83,6 +85,7 @@ Resources:
         - "-"
         - - !Sub ${ProjectName}
           - !Ref "AWS::AccountId"
+          - !Ref "AWS::Region"
           - "logs"
       BucketEncryption:
         ServerSideEncryptionConfiguration:
@@ -124,6 +127,7 @@ Resources:
               - "-"
               - - !Sub ${ProjectName}
                 - !Ref "AWS::AccountId"
+                - !Ref "AWS::Region"
         #- CloudFrontFullAccessPolicy: {}
         - RekognitionDetectOnlyPolicy: {}
         - SNSPublishMessagePolicy:
