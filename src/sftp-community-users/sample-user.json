@@ -1,0 +1,23 @@
+[
+  {
+    "ParameterKey": "TransferServerStack",
+    "ParameterValue": "sftp-community"
+  }, 
+  {
+    "ParameterKey": "BucketStack",
+    "ParameterValue": "community-bucket"
+  },
+  {
+    "ParameterKey": "UserName",
+    "ParameterValue": "sample-user"
+  },
+  {
+    "ParameterKey": "PublicKey",
+    "ParameterValue": "sample-user public key that starts with ssh-rsa ..."
+  },
+  {
+    "ParameterKey": "CidrIp",
+    "ParameterValue": "0.0.0.0/0"
+  }
+]
+
