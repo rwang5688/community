@@ -17,7 +17,15 @@ Parameters:
   PublicSubnet2:
     Description: Select an available public subnet for 2 of 2 Transfer family endpoints
     Type: AWS::EC2::Subnet::Id
+  
+  CustomHostname:
+    Description: Provide the custom hostname for the Transfer server endpoint
+    Type: String
 
+  HostedZone:
+    Description: Select a hosted zone for the Transfer server endpoint
+    Type: AWS::Route53::HostedZone::Id
+  
 Resources:
   TransferServer:
     Type: AWS::Transfer::Server
@@ -136,6 +144,21 @@ Resources:
             Resource: "arn:aws:logs:*:*:log-group:/aws/transfer/*"
       Roles: 
         - !Ref LoggingRole
+
+  DNSRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId: !Sub ${HostedZone}
+      Name: !Sub ${CustomHostname}
+      ResourceRecords:
+        - !Join
+          - ''
+          - - !GetAtt TransferServer.ServerId
+            - '.server.transfer.'
+            - !Ref 'AWS::Region'
+            - '.amazonaws.com'
+      TTL: '300'
+      Type: CNAME
 
 Outputs:
   SecurityGroupId:
