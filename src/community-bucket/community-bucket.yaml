@@ -96,7 +96,7 @@ Resources:
           - ExpirationInDays: !Ref RetentionPeriodDays
             Id: Object expiration policy
             Status: Enabled
-      AccessControl: LogDeliveryWrite
+      #AccessControl: LogDeliveryWrite
       PublicAccessBlockConfiguration:
         BlockPublicAcls: True
         BlockPublicPolicy: True
